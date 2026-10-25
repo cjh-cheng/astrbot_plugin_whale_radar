@@ -186,7 +186,7 @@ def _fmt_pct(value: float) -> str:
     return f"{value * 100:.0f}%"
 
 
-PLUGIN_VERSION = "0.5.0"
+PLUGIN_VERSION = "0.5.1"
 
 
 @register(
@@ -212,6 +212,9 @@ class WhaleRadar(Star):
         self._learn_state: dict[str, dict] = {}
         self._state_dirty = 0
         self._load_learn_state()
+        # WebUI 的 template_list 编辑器靠 __template_key 认模板；老配置/脚本写入的条目没有这个键，
+        # 面板里会显示成空白条目且编辑不了。启动时补一次。
+        self._ensure_template_keys()
         # umo -> (ts, score, text) 打分结果缓存，同一话题短时间内复用，省调用
         self._judge_cache: dict[str, tuple[float, int, str]] = {}
         # umo -> deque[str] 最近几条消息，给打分提供上下文
@@ -272,6 +275,42 @@ class WhaleRadar(Star):
         except Exception as exc:  # noqa: BLE001
             logger.error(f"[whale_radar] 配置文件写入失败: {exc}")
             return f"只改了内存，写盘失败：{exc}"
+
+    def _ensure_template_keys(self) -> None:
+        """给 keyword_groups 的每一项补上 WebUI 认模板用的 __template_key。
+
+        没这个键的条目在面板里会显示成空白、编辑不了，保存时容易被丢掉；
+        整张列表被存空时，用默认方向补回来，避免插件悄悄退化成"没有方向"。
+        """
+        try:
+            raw = self.config.get("keyword_groups")
+        except Exception:
+            return
+        if not isinstance(raw, list) or not raw:
+            seed = DEFAULTS.get("keyword_groups") or []
+            if seed:
+                seeded = [dict(item, __template_key="direction") for item in seed if isinstance(item, dict)]
+                if seeded:
+                    result = self._save({"keyword_groups": seeded})
+                    logger.warning(
+                        f"[whale_radar] keyword_groups 是空的，已用默认 {len(seeded)} 个方向补回来（{result}）"
+                    )
+            return
+        patched = False
+        fixed: list[dict] = []
+        for item in raw:
+            if not isinstance(item, dict):
+                fixed.append(item)
+                continue
+            entry = dict(item)
+            if not str(entry.get("__template_key") or "").strip():
+                entry["__template_key"] = "direction"
+                patched = True
+            fixed.append(entry)
+        if not patched:
+            return
+        result = self._save({"keyword_groups": fixed})
+        logger.info(f"[whale_radar] 已给 {len(fixed)} 个方向补 __template_key（{result}）")
 
     def _groups(self) -> list[dict]:
         """归一化后的关键词方向列表：[{name, weight, words}]。"""

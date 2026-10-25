@@ -7,7 +7,7 @@ desc: >-
   命中越多概率越高；没命中时可以再用一个便宜的模型打个 0-10 分，够分才插话。
   带冷却、每日上限、连续说话抑制，避免变成复读机。
   `/雷达` 系列指令可以在 QQ 里直接加词、改方向权重、改各种概率，改完立刻生效并落盘。
-version: 0.5.0
+version: 0.5.1
 author: cjh-cheng
 repo: https://github.com/cjh-cheng/astrbot_plugin_whale_radar
 astrbot_version: ">=4.17.0"
