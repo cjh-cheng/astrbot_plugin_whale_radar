@@ -8,8 +8,8 @@ desc: >-
   带冷却、每日上限、连续说话抑制，避免变成复读机。
   `/雷达` 系列指令可以在 QQ 里直接加词、改方向权重、改各种概率，改完立刻生效并落盘。
 version: 0.5.0
-author: qq-fish
-repo: https://github.com/qq-fish/astrbot_plugin_whale_radar
+author: cjh-cheng
+repo: https://github.com/cjh-cheng/astrbot_plugin_whale_radar
 astrbot_version: ">=4.17.0"
 tags:
   - 群聊

@@ -191,10 +191,10 @@ PLUGIN_VERSION = "0.5.0"
 
 @register(
     "astrbot_plugin_whale_radar",
-    "qq-fish",
+    "cjh-cheng",
     "小鲸鱼雷达：群聊里聊到她的日常爱好时，提高主动插话概率（带 QQ 内调试指令）",
     PLUGIN_VERSION,
-    "https://github.com/qq-fish/astrbot_plugin_whale_radar",
+    "https://github.com/cjh-cheng/astrbot_plugin_whale_radar",
 )
 class WhaleRadar(Star):
     def __init__(self, context: Context, config: AstrBotConfig | None = None):
