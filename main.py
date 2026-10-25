@@ -247,8 +247,28 @@ class WhaleRadar(Star):
             return Path(raw)
         return Path(__file__).resolve().parents[2] / "config" / "astrbot_plugin_whale_radar_config.json"
 
+    def _with_template_keys(self, groups) -> list:
+        """给写盘的方向补上 __template_key（WebUI 的 template_list 靠它认模板）。
+
+        所有改 keyword_groups 的路径都从这里过一遍，避免某条指令重建条目时
+        又把这个键弄丢，导致面板显示空白、一保存就被清空。
+        """
+        out: list = []
+        for item in groups or []:
+            if not isinstance(item, dict):
+                out.append(item)
+                continue
+            entry = dict(item)
+            if not str(entry.get("__template_key") or "").strip():
+                entry["__template_key"] = "direction"
+            out.append(entry)
+        return out
+
     def _save(self, updates: dict) -> str:
         """改内存 + 落盘，返回给人看的结果。"""
+        if isinstance(updates, dict) and "keyword_groups" in updates:
+            updates = dict(updates)
+            updates["keyword_groups"] = self._with_template_keys(updates["keyword_groups"])
         try:
             for key, value in updates.items():
                 self.config[key] = value
