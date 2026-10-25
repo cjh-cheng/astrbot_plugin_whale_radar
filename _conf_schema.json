@@ -1,0 +1,461 @@
+{
+  "enable": {
+    "description": "启用小鲸鱼雷达",
+    "type": "bool",
+    "default": true,
+    "hint": "关掉后完全不监听群消息。"
+  },
+  "whitelist": {
+    "description": "生效的群号（留空=所有群）",
+    "type": "list",
+    "default": [
+      "629525949"
+    ],
+    "hint": "填群号字符串，比如 629525949。留空数组表示所有群都参与。"
+  },
+  "operator_uids": {
+    "description": "能用雷达指令的 QQ 号（主人）",
+    "type": "list",
+    "default": [],
+    "hint": "填你自己的 QQ 号；AstrBot 管理员本来就能用。"
+  },
+  "keyword_groups": {
+    "description": "关键词方向（可视化编辑：方向名 / 权重 / 词表）",
+    "type": "template_list",
+    "templates": {
+      "direction": {
+        "name": "关键词方向",
+        "hint": "一个方向 = 一组同类词 + 命中后的插话概率。改完保存即生效。",
+        "display_item": "name",
+        "items": {
+          "name": {
+            "description": "方向名",
+            "type": "string",
+            "default": ""
+          },
+          "weight": {
+            "description": "命中概率（0-1）",
+            "type": "float",
+            "default": 0.6,
+            "slider": {
+              "min": 0,
+              "max": 1,
+              "step": 0.05
+            }
+          },
+          "words": {
+            "description": "词表（一行一个，或空格/逗号分隔）",
+            "type": "list",
+            "default": []
+          }
+        }
+      }
+    },
+    "default": [
+      {
+        "name": "游戏",
+        "weight": 0.8,
+        "words": [
+          "游戏",
+          "开黑",
+          "副本",
+          "上分",
+          "抽卡",
+          "联机"
+        ]
+      },
+      {
+        "name": "二次元",
+        "weight": 0.65,
+        "words": [
+          "番剧",
+          "追番",
+          "漫画",
+          "cos",
+          "周边"
+        ]
+      },
+      {
+        "name": "吃喝",
+        "weight": 0.7,
+        "words": [
+          "外卖",
+          "火锅",
+          "烧烤",
+          "奶茶",
+          "夜宵",
+          "饿"
+        ]
+      },
+      {
+        "name": "股票",
+        "weight": 0.8,
+        "words": [
+          "A股",
+          "基金",
+          "涨停",
+          "割肉",
+          "跌麻"
+        ]
+      },
+      {
+        "name": "上班熬夜",
+        "weight": 0.6,
+        "words": [
+          "加班",
+          "摸鱼",
+          "通宵",
+          "失眠",
+          "上班"
+        ]
+      },
+      {
+        "name": "硬件代码",
+        "weight": 0.65,
+        "words": [
+          "显卡",
+          "装机",
+          "报错",
+          "蓝屏",
+          "配置"
+        ]
+      }
+    ],
+    "hint": "也可以用 QQ 里的 /雷达 加词 或 /雷达 词 维护。"
+  },
+  "base_probability": {
+    "description": "没命中兴趣时的基础插话概率",
+    "type": "float",
+    "default": 0.02,
+    "slider": {
+      "min": 0,
+      "max": 0.2,
+      "step": 0.01
+    },
+    "hint": "相当于内置的 possibility_reply，建议 0.01-0.05，纯粹保个活人感。"
+  },
+  "keyword_probability": {
+    "description": "命中一个兴趣关键词时的插话概率",
+    "type": "float",
+    "default": 0.55,
+    "slider": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    },
+    "hint": "命中越多越高，命中 3 个以上会升到 strong_probability。"
+  },
+  "strong_probability": {
+    "description": "强命中（多个关键词）时的插话概率",
+    "type": "float",
+    "default": 0.9,
+    "slider": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    },
+    "hint": "聊得正起劲、又正好戳到爱好，基本就让她开口。"
+  },
+  "keyword_hits_for_strong": {
+    "description": "多少个关键词算强命中",
+    "type": "int",
+    "default": 2,
+    "slider": {
+      "min": 1,
+      "max": 5,
+      "step": 1
+    }
+  },
+  "interest_keywords": {
+    "description": "兴趣关键词（她的人设爱好）",
+    "type": "list",
+    "default": [
+      "A股",
+      "股市",
+      "股票",
+      "大盘",
+      "上证",
+      "创业板",
+      "涨了",
+      "跌了",
+      "割肉",
+      "抄底",
+      "仓位",
+      "基金",
+      "ETF",
+      "黑神话",
+      "艾尔登法环",
+      "赛博朋克",
+      "原神",
+      "鸣潮",
+      "星铁",
+      "崩铁",
+      "绝区零",
+      "战争雷霆",
+      "塔科夫",
+      "解限机",
+      "王者荣耀",
+      "和平精英",
+      "打游戏",
+      "开黑",
+      "上号",
+      "抽卡",
+      "十连",
+      "氪金",
+      "版本更新",
+      "前瞻",
+      "联动",
+      "大白饭",
+      "干饭",
+      "吃饭",
+      "外卖",
+      "夜宵",
+      "烧烤",
+      "火锅",
+      "奶茶",
+      "咖啡",
+      "饿",
+      "馋",
+      "减肥",
+      "熬夜",
+      "失眠",
+      "困",
+      "起床",
+      "上班",
+      "加班",
+      "摸鱼",
+      "上班摸鱼",
+      "下班",
+      "上班如上坟",
+      "番剧",
+      "追番",
+      "新番",
+      "动画",
+      "漫画",
+      "cos",
+      "二次元",
+      "表情包",
+      "梗图",
+      "显卡",
+      "CPU",
+      "内存",
+      "装机",
+      "掉帧",
+      "蓝屏",
+      "写代码",
+      "bug",
+      "报错",
+      "猫",
+      "狗",
+      "鲸鱼",
+      "雨",
+      "下雨",
+      "天气"
+    ],
+    "hint": "词越具体越好，别放「好」「的」这种万能词。空格无意义，可以一行一个。"
+  },
+  "negative_keywords": {
+    "description": "命中这些词就不插话",
+    "type": "list",
+    "default": [
+      "政治",
+      "台独",
+      "港独",
+      "开盒",
+      "人肉",
+      "生死",
+      "自杀",
+      "癌"
+    ],
+    "hint": "敏感话题直接闭嘴。"
+  },
+  "cooldown_seconds": {
+    "description": "同一群两次插话的最小间隔（秒）",
+    "type": "int",
+    "default": 120,
+    "slider": {
+      "min": 10,
+      "max": 1800,
+      "step": 10
+    }
+  },
+  "daily_limit": {
+    "description": "每个群每天最多主动插话次数",
+    "type": "int",
+    "default": 40,
+    "slider": {
+      "min": 1,
+      "max": 300,
+      "step": 1
+    }
+  },
+  "context_size": {
+    "description": "插话时带上最近多少条群消息",
+    "type": "int",
+    "default": 15,
+    "slider": {
+      "min": 0,
+      "max": 50,
+      "step": 1
+    },
+    "hint": "0 = 只带当前这条消息。"
+  },
+  "steer_prompt": {
+    "description": "插话时额外塞给她的提示",
+    "type": "string",
+    "default": "（群里正在聊的东西戳到你了。你可以顺口插一句，短一点、像群里的人说话；也可以只发个表情包。别解释你为什么插话。）",
+    "hint": "留空就不加。"
+  },
+  "judge_enable": {
+    "description": "关键词没命中时，用便宜模型打个分",
+    "type": "bool",
+    "default": true,
+    "hint": "语义判断（比如没出现「股票」但聊的是亏钱），成本很低，但有频率限制。"
+  },
+  "judge_provider_id": {
+    "description": "打分用的模型 ID（留空=当前模型）",
+    "type": "string",
+    "default": "",
+    "hint": "建议填个体积小、便宜的模型 ID；留空则用当前会话模型。"
+  },
+  "judge_threshold": {
+    "description": "打分 >= 这个值才插话",
+    "type": "int",
+    "default": 7,
+    "slider": {
+      "min": 1,
+      "max": 10,
+      "step": 1
+    }
+  },
+  "judge_probability": {
+    "description": "打分通过后的插话概率",
+    "type": "float",
+    "default": 0.45,
+    "slider": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    }
+  },
+  "judge_min_length": {
+    "description": "短于这个字数的消息不打分",
+    "type": "int",
+    "default": 8,
+    "slider": {
+      "min": 0,
+      "max": 100,
+      "step": 1
+    }
+  },
+  "judge_max_per_minute": {
+    "description": "每个群每分钟最多打几次分",
+    "type": "int",
+    "default": 6,
+    "slider": {
+      "min": 0,
+      "max": 60,
+      "step": 1
+    }
+  },
+  "judge_context_messages": {
+    "description": "打分时带上最近几条消息当上下文",
+    "type": "int",
+    "default": 4,
+    "slider": {
+      "min": 1,
+      "max": 10,
+      "step": 1
+    },
+    "hint": "带上上下文判断更准；同一话题的连续消息会复用上一次的分数，不会重复调用。"
+  },
+  "judge_cache_seconds": {
+    "description": "同一话题多久内复用打分结果（秒）",
+    "type": "int",
+    "default": 120,
+    "slider": {
+      "min": 0,
+      "max": 600,
+      "step": 10
+    },
+    "hint": "0 = 不复用，每条都问一次模型（贵）。"
+  },
+  "learn_enable": {
+    "description": "自动学新爱好",
+    "type": "bool",
+    "default": true,
+    "hint": "她会定期看群聊，把可能感兴趣的新词捡进词库（有限速，不会乱加）。"
+  },
+  "learn_interval_minutes": {
+    "description": "最多多少分钟分析一次",
+    "type": "int",
+    "default": 60,
+    "slider": {
+      "min": 5,
+      "max": 1440,
+      "step": 5
+    }
+  },
+  "learn_min_messages": {
+    "description": "攒够多少条群消息才分析",
+    "type": "int",
+    "default": 60,
+    "slider": {
+      "min": 5,
+      "max": 500,
+      "step": 5
+    }
+  },
+  "learn_max_per_run": {
+    "description": "一次最多学几个词",
+    "type": "int",
+    "default": 2,
+    "slider": {
+      "min": 1,
+      "max": 5,
+      "step": 1
+    }
+  },
+  "learn_weight": {
+    "description": "自动学来的新方向的默认权重",
+    "type": "float",
+    "default": 0.6,
+    "slider": {
+      "min": 0,
+      "max": 1,
+      "step": 0.05
+    }
+  },
+  "learn_direction_name": {
+    "description": "新词没有合适方向时放到这里",
+    "type": "string",
+    "default": "新发现"
+  },
+  "learn_max_total_words": {
+    "description": "词库总上限（超过就不再学）",
+    "type": "int",
+    "default": 160,
+    "slider": {
+      "min": 20,
+      "max": 500,
+      "step": 10
+    }
+  },
+  "learn_notify_uid": {
+    "description": "学到新词时私聊通知这个 QQ（留空=不通知）",
+    "type": "string",
+    "default": ""
+  },
+  "learned_words": {
+    "description": "学习记录（自动维护，别手改）",
+    "type": "list",
+    "default": [],
+    "hint": "每次学到的词、方向、时间、原因。用 /雷达 学习记录 查看，/雷达 忘词 清理。"
+  },
+  "learn_state": {
+    "description": "学习进度（自动维护，别手改）",
+    "type": "dict",
+    "default": {},
+    "hint": "每个群攒了多少条消息、上次分析时间；存在这里才能重启后接着攒。"
+  }
+}
