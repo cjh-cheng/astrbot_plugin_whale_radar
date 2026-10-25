@@ -186,7 +186,7 @@ def _fmt_pct(value: float) -> str:
     return f"{value * 100:.0f}%"
 
 
-PLUGIN_VERSION = "0.5.1"
+PLUGIN_VERSION = "0.5.2"
 
 
 @register(
